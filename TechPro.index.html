@@ -1,0 +1,416 @@
+/my-techpro-site
+├── /netlify/functions
+│   └── create-checkout.js   <-- The Backend Logic
+├── index.html               <-- Optimized Home
+├── pricing.html             <-- Optimized Pricing
+├── success.html             <-- Success Page
+├── style.css                <-- Modernized CSS
+└── package.json             <-- <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TechPro Premium | Boost Your Workflow</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <strong>TechPro</strong>
+        <a href="pricing.html">Pricing</a>
+    </nav>
+
+    <header class="hero">
+        <h1>Scale Your Productivity with TechPro Premium</h1>
+        <p>Exclusive content, priority support, and enterprise-grade security.</p>
+        <a href="pricing.html" class="cta-button">Get Started Now</a>
+    </header>
+
+    <section class="testimonials">
+        <h2>Trusted by Industry Leaders</h2>
+        <div class="testimonial-grid">
+            <blockquote>
+                <p>"The best investment I've made for my dev team this year."</p>
+                <cite>— Alex Rivera, CTO</cite>
+            </blockquote>
+        </div>
+    </section>
+</body>
+</<div class="pricing-container">
+    <div class="card free">
+        <h3>Free</h3>
+        <p class="price">$0<span>/mo</span></p>
+        <ul>
+            <li>Standard Support</li>
+            <li>Basic Access</li>
+        </ul>
+        <button disabled>Current Plan</button>
+    </div>
+
+    <div class="card premium featured">
+        <span class="badge">Most Popular</span>
+        <h3>Premium</h3>
+        <p class="price">$29<span>/mo</span></p>
+        <ul>
+            <li>24/7 Priority Support</li>
+            <li>Full Content Library</li>
+            <li>Early Feature Access</li>
+        </ul>
+        <form action="/.netlify/functions/create-checkout" method="POST">
+            <button type="submit" class="cta">Upgrade to Premium</button>
+        </form>
+    </div>
+</div>
+html>
+Stripe Dependency
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'gbp',
+          product_data: { name: 'TechPro Premium Subscription' },
+          unit_amount: 2900, // £29.00
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    success_url: `${process.env.URL}/success.html`,
+    cancel_url: `${process.env.URL}/pricing.html`,
+  });
+
+  return {
+    statusCode: 303,
+    headers: { Location: session.url },
+  };
+}:root {
+    --primary: #4CAF50;
+    --dark: #2c3e50;
+    --light: #f9f9f9;
+}
+
+body { font-family: 'Inter', sans-serif; margin: 0; color: var(--dark); }
+
+.hero { 
+    padding: 80px 20px; 
+    text-align: center; 
+    background: #f0f4f8; 
+}
+
+.pricing-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 50px;
+    flex-wrap: wrap;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 30px;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.featured { 
+    border: 2px solid var(--primary); 
+    transform: scale(1.05); 
+    position: relative;
+}
+
+.badge {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: var(--primary);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+}
+
+.cta {
+    background: var(--primary);
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+;<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to TechPro Premium!</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .success-container {
+            text-align: center;
+            padding: 100px 20px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        .icon-circle {
+            width: 80px;
+            height: 80px;
+            background: #4CAF50;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            margin: 0 auto 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="success-container">
+        <div class="icon-circle">✓</div>
+        <h1>Subscription Confirmed!</h1>
+        <p>Thank you for upgrading to <strong>TechPro Premium</strong>. Your account has been activated, and you now have full access to all exclusive features.</p>
+        <hr style="margin: 30px 0; border: 0; border-top: 1px solid #eee;">
+        <p>A receipt has been sent to your email. Need help getting started?</p>
+        <a href="/" class="cta">Go to Dashboard</a>
+    </div>
+</body>
+</html>
+
+{
+  "name": "techpro-premium",
+  "version": "1.0.0",
+  "dependencies": {
+    "stripe": "^14.0.0"
+  }
+}/* /index.html  200
+
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+exports.handler = async (event) => {
+  // In a real app, you would get the customerId from your database 
+  // after the user logs in. For now, we use a placeholder.
+  const { customerId } = JSON.parse(event.body);
+
+  const session = await stripe.billingPortal.sessions.create({
+    customer: customerId,
+    return_url: `${process.env.URL}/index.html`,
+  });
+
+  return {
+    statusCode: 200,
+    body: JSON.stringify({ url: session.url }),
+  };
+};
+
+<footer>
+    <p>© 2026 TechPro Premium</p>
+    <a href="#" id="manage-billing">Manage Billing</a>
+</footer>
+
+<script>
+  document.getElementById('manage-billing').addEventListener('click', async () => {
+    // This assumes you've stored the customer ID in local storage after purchase
+    const customerId = localStorage.getItem('stripe_customer_id'); 
+    
+    const response = await fetch('/.netlify/functions/create-portal', {
+      method: 'POST',
+      body: JSON.stringify({ customerId }),
+    });
+    
+    const { url } = await response.json();
+    window.location.href = url;
+  });
+</script>
+
+<footer class="main-footer">
+    <div class="footer-grid">
+        <div class="footer-column">
+            <h4>About TechPro</h4>
+            <p>Empowering professionals with premium tools and 24/7 priority support. Built for speed, designed for security.</p>
+        </div>
+
+        <div class="footer-column">
+            <h4>Product</h4>
+            <ul>
+                <li><a href="pricing.html">Pricing</a></li>
+                <li><a href="subscribe.html">Upgrade</a></li>
+                <li><a href="#" id="manage-billing">Customer Portal</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-column">
+            <h4>Trust Center</h4>
+            <ul>
+                <li><a href="#">Privacy Policy</a></li>
+                <li><a href="#">Terms of Service</a></li>
+                <li><a href="#">Status Page</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <p>&copy; 2026 TechPro. All rights reserved. Secure payments by Stripe.</p>
+    </div>
+</footer>
+
+.main-footer {
+    background-color: #f8f9fa;
+    padding: 60px 20px 20px;
+    border-top: 1px solid #eee;
+    margin-top: 80px;
+    font-size: 0.9rem;
+}
+
+.footer-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 40px;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+
+.footer-column h4 {
+    color: var(--dark);
+    margin-bottom: 20px;
+    font-size: 1.1rem;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 10px;
+}
+
+.footer-column a {
+    text-decoration: none;
+    color: #666;
+    transition: color 0.2s;
+}
+
+.footer-column a:hover {
+    color: var(--primary);
+}
+
+.footer-bottom {
+    text-align: center;
+    margin-top: 40px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #999;
+}
+
+/* Responsive Footer */
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Privacy Policy | TechPro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content-container" style="max-width: 800px; margin: 50px auto; padding: 20px;">
+        <h1>Privacy Policy</h1>
+        <p>Last Updated: March 2026</p>
+        
+        <h3>1. Data Collection</h3>
+        <p>We collect your email address and name to provide access to TechPro Premium. We do not store your credit card information on our servers; all payments are processed securely by <strong>Stripe</strong>.</p>
+        
+        <h3>2. Use of Data</h3>
+        <p>Your data is used solely to manage your subscription, provide customer support, and send essential service updates. We never sell your personal information to third parties.</p>
+        
+        <h3>3. Cookies</h3>
+        <p>We use essential cookies to keep you logged in and to remember your subscription status.</p>
+        
+        <a href="/" class="cta">Back to Home</a>
+    </div>
+</body>
+</html>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><title>Terms of Service | TechPro</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="content-container" style="max-width: 800px; margin: 50px auto; padding: 20px;">
+        <h1>Terms of Service</h1>
+        <p>Last Updated: March 2026</p>
+
+        <h3>1. Subscription Services</h3>
+        <p>By subscribing to TechPro Premium, you agree to a monthly fee of £29.00. You may cancel at any time via the Customer Portal.</p>
+
+        <h3>2. Refunds</h3>
+        <p>Due to the digital nature of our content, refunds are generally not provided, but we evaluate requests on a case-by-case basis through our support channel.</p>
+
+        <h3>3. Limitation of Liability</h3>
+        <p>TechPro provides tools "as is." We are not liable for any indirect damages resulting from the use of our software or services.</p>
+        
+        <a href="/" class="cta">Back to Home</a>
+    </div>
+</body>
+</html>
+
+<li><a href="privacy.html">Privacy Policy</a></li>
+<li><a href="terms.html">Terms of Service</a></li>
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+
+exports.handler = async (event) => {
+  if (event.httpMethod !== "POST") {
+    return { statusCode: 405, body: "Method Not Allowed" };
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    payment_method_types: ['card'],
+    line_items: [
+      {
+        price_data: {
+          currency: 'gbp',
+          product_data: { 
+            name: 'ProTechPro Premium Subscription',
+            description: 'Priority support and exclusive premium content'
+          },
+          unit_amount: 2900, 
+        },
+        quantity: 1,
+      },
+    ],
+    mode: 'payment',
+    // UPDATED DOMAIN LOGIC
+    success_url: `https://useprotechpro.com/success.html`,
+    cancel_url: `https://useprotechpro.com/pricing.html`,
+  });
+
+  return {
+    statusCode: 303,
+    headers: { Location: session.url },
+  };
+};
+
+<header class="hero">
+    <h1>Scale Your Productivity with ProTechPro</h1>
+    <p>The ultimate toolkit for modern professionals. Get the edge with ProTechPro Premium.</p>
+    <a href="pricing.html" class="cta-button">Join ProTechPro Today</a>
+</header>
+
