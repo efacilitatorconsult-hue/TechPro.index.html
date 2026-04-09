@@ -1,39 +1,38 @@
-const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
+import Stripe from 'stripe';
 
-exports.handler = async (event) => {
-  // 1. Only allow "POST" requests (when someone clicks the button)
-  if (event.httpMethod !== "POST") {
-    return { statusCode: 405, body: "Method Not Allowed" };
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY);
+
+export default async function handler(req, res) {
+  // 1. Handle CORS Preflight
+  if (req.method === 'OPTIONS') {
+    res.status(200).end();
+    return;
+  }
+
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
   }
 
   try {
-    // 2. Create the Stripe Checkout Session
+    const { items, user_id } = req.body;
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
-      line_items: [
-        {
-          price_data: {
-            currency: 'gbp',
-            product_data: { 
-              name: 'TechPro Premium Subscription',
-              description: 'Priority support and 177+ exclusive premium guides.'
-            },
-            unit_amount: 2900, // This is £29.00 in pence
-          },
-          quantity: 1,
-        },
-      ],
-      mode: 'payment',
-      success_url: `https://usetechpro.com/success.html`,
-      cancel_url: `https://usetechpro.com/pricing.html`,
+      line_items: items,
+      mode: 'subscription', // or 'payment'
+      success_url: `${req.headers.origin}/success?session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${req.headers.origin}/cancel`,
+      metadata: {
+        user_id: user_id // This is for your webhook to find the user later!
+      },
     });
 
-    // 3. Send the user to the Stripe Payment Page
-    return {
-      statusCode: 303,
-      headers: { Location: session.url },
-    };
-  } catch (error) {
+    res.status(200).json({ id: session.id });
+  } catch (err) {
+    console.error("Stripe Error:", err.message);
+    res.status(500).json({ error: err.message });
+  }
+}
     return {
       statusCode: 500,
       body: JSON.stringify({ error: error.message }),
