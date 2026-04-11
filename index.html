@@ -1,70 +1,182 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TechPro Premium | Boost Your Workflow</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>TechPro Premium | Boost Your Workflow</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-    <nav>
-        <strong>TechPro</strong>
-        <div class="nav-links">
-            <a href="index.html">Home</a>
-            <a href="pricing.html">Pricing</a>
-        </div>
-    </nav>
+  <nav>
+    <strong>TechPro</strong>
+    <div class="nav-links">
+      <a href="index.html">Home</a>
+      <a href="pricing.html">Pricing</a>
+    </div>
+  </nav>
 
-    <header class="hero">
-        <h1>Scale Your Productivity with TechPro</h1>
-        <p>The ultimate toolkit for modern professionals. Get the edge with TechPro Premium.</p>
-        <a href="#pricing" class="cta-button">Join TechPro Today</a>
-    </header>
+  <header class="hero">
+    <h1>Scale Your Productivity with TechPro</h1>
+    <p>The ultimate toolkit for modern professionals. Get the edge with TechPro Premium.</p>
+    <a href="#pricing" class="cta-button">Join TechPro Today</a>
+  </header>
 
-    <div id="pricing" class="pricing-container">
-        <div class="card free">
-            <h3>Free</h3>
-            <p class="price">£0<span>/mo</span></p>
-            <ul>
-                <li>Standard Support</li>
-                <li>Basic Access</li>
-            </ul>
-            <button disabled>Current Plan</button>
-        </div>
-
-        <div class="card premium featured">
-            <span class="badge">Most Popular</span>
-            <h3>Premium</h3>
-            <p class="price">£29<span>/mo</span></p>
-            <ul>
-                <li>24/7 Priority Support</li>
-                <li>Full Content Library</li>
-                <li>Early Feature Access</li>
-            </ul>
-            <form action="/api/create-checkout" method="POST">
-                <button type="submit" class="cta">Upgrade to TechPro Premium</button>
-            </form>
-        </div>
+  <div id="pricing" class="pricing-container">
+    <div class="card free">
+      <h3>Free</h3>
+      <p class="price">£0<span>/mo</span></p>
+      <ul>
+        <li>Standard Support</li>
+        <li>Basic Access</li>
+      </ul>
+      <button id="free-plan-btn" disabled>Current Plan</button>
     </div>
 
-    <footer class="main-footer">
-        <div class="footer-grid">
-            <div class="footer-column">
-                <h4>About TechPro</h4>
-                <p>Empowering professionals with premium tools. Built for speed, designed for security.</p>
-            </div>
-            <div class="footer-column">
-                <h4>Product</h4>
-                <ul>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="privacy.html">Privacy Policy</a></li>
-                    <li><a href="terms.html">Terms of Service</a></li>
-                </ul>
-            </div>
-        </div>
-        <div class="footer-bottom">
-            <p>&copy; 2026 TechPro. Secure payments by Stripe.</p>
-        </div>
-    </footer>
+    <div class="card premium featured">
+      <span class="badge">Most Popular</span>
+      <h3>Premium</h3>
+      <p class="price">£29<span>/mo</span></p>
+      <ul>
+        <li>24/7 Priority Support</li>
+        <li>Full Content Library</li>
+        <li>Early Feature Access</li>
+      </ul>
+
+      <button id="checkout-btn" type="button" class="cta">
+        Upgrade to TechPro Premium
+      </button>
+
+      <p id="checkout-status" style="margin-top:10px; color:#666;"></p>
+    </div>
+  </div>
+
+  <footer class="main-footer">
+    <div class="footer-grid">
+      <div class="footer-column">
+        <h4>About TechPro</h4>
+        <p>Empowering professionals with premium tools. Built for speed, designed for security.</p>
+      </div>
+      <div class="footer-column">
+        <h4>Product</h4>
+        <ul>
+          <li><a href="#pricing">Pricing</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2026 TechPro. Secure payments by Stripe.</p>
+    </div>
+  </footer>
+
+  <script type="module">
+    import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
+
+    const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+    const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
+
+    const checkoutBtn = document.getElementById("checkout-btn");
+    const checkoutStatus = document.getElementById("checkout-status");
+
+    function setStatus(msg, isError = false) {
+      if (!checkoutStatus) return;
+      checkoutStatus.textContent = msg || "";
+      checkoutStatus.style.color = isError ? "#b00020" : "#666";
+    }
+
+    if (!supabaseUrl || !supabaseAnonKey) {
+      setStatus("App misconfigured: missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY.", true);
+      if (checkoutBtn) checkoutBtn.disabled = true;
+      throw new Error("Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY.");
+    }
+
+    const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+    async function updateCurrentPlanUI() {
+      // Optional UX: show “Current Plan” based on user_access.is_premium_subscriber
+      const { data: { user }, error: userErr } = await supabase.auth.getUser();
+      if (userErr || !user) return;
+
+      const { data: accessRow, error: accessErr } = await supabase
+        .from("user_access")
+        .select("is_premium_subscriber")
+        .eq("user_id", user.id)
+        .maybeSingle();
+
+      if (accessErr || !accessRow) return;
+
+      const isPremium = !!accessRow.is_premium_subscriber;
+
+      // Disable buttons accordingly
+      if (isPremium) {
+        if (checkoutBtn) checkoutBtn.disabled = true;
+        setStatus("You already have TechPro Premium ✅");
+      } else {
+        setStatus("");
+        if (checkoutBtn) checkoutBtn.disabled = false;
+      }
+    }
+
+    async function startTechProCheckout() {
+      try {
+        if (checkoutBtn) checkoutBtn.disabled = true;
+        setStatus("Preparing checkout...");
+
+        // Require logged-in user
+        const { data: { user }, error: userErr } = await supabase.auth.getUser();
+        if (userErr || !user) {
+          setStatus("Please log in first.", true);
+          if (checkoutBtn) checkoutBtn.disabled = false;
+          return;
+        }
+
+        // Get JWT
+        const { data: { session } } = await supabase.auth.getSession();
+        const jwt = session?.access_token;
+        if (!jwt) {
+          setStatus("Session expired. Please log in again.", true);
+          if (checkoutBtn) checkoutBtn.disabled = false;
+          return;
+        }
+
+        const res = await fetch(`${supabaseUrl}/functions/v1/create-checkout-session`, {
+          method: "POST",
+          headers: {
+            "Authorization": `Bearer ${jwt}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({})
+        });
+
+        const payload = await res.json().catch(() => ({}));
+
+        if (!res.ok) {
+          setStatus(payload?.error ?? "Checkout failed. Please try again.", true);
+          if (checkoutBtn) checkoutBtn.disabled = false;
+          return;
+        }
+
+        if (!payload?.url) {
+          setStatus("Checkout URL missing from server response.", true);
+          if (checkoutBtn) checkoutBtn.disabled = false;
+          return;
+        }
+
+        // Redirect to Stripe
+        window.location.href = payload.url;
+      } catch (e) {
+        setStatus(e?.message ?? "Unexpected checkout error.", true);
+        if (checkoutBtn) checkoutBtn.disabled = false;
+      }
+    }
+
+    if (checkoutBtn) {
+      checkoutBtn.addEventListener("click", startTechProCheckout);
+    }
+
+    // Set initial UI
+    updateCurrentPlanUI();
+  </script>
 </body>
 </html>
