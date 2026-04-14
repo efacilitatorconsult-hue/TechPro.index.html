@@ -1,5 +1,27 @@
 {
+  "name": "techpro-premium",
+  "version": "1.0.0",
+  "description": "TechPro Premium - Gaming Hardware Guide with Stripe Payments",
+  "type": "module",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "vercel build",
+    "start": "vercel start",
+    "lint": "eslint . --ext .ts,.js",
+    "format": "prettier --write ."
+  },
   "dependencies": {
+    "@supabase/supabase-js": "^2.38.1",
     "stripe": "^14.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@vercel/node": "^3.0.0",
+    "typescript": "^5.0.0",
+    "eslint": "^8.0.0",
+    "prettier": "^3.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
