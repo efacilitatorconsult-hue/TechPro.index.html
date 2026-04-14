@@ -1,7 +1,39 @@
 {
-  "version": 2,
-  "cleanUrls": true,
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api/$1" }
-  ]
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install",
+  "framework": "static",
+  "regions": ["iad1"],
+  "env": [
+    {
+      "key": "STRIPE_SECRET_KEY",
+      "description": "Stripe Secret API Key for payments",
+      "type": "secret"
+    },
+    {
+      "key": "STRIPE_WEBHOOK_SECRET",
+      "description": "Stripe Webhook Signing Secret",
+      "type": "secret"
+    },
+    {
+      "key": "VITE_SUPABASE_URL",
+      "description": "Supabase Project URL",
+      "type": "secret"
+    },
+    {
+      "key": "VITE_SUPABASE_ANON_KEY",
+      "description": "Supabase Anonymous Key",
+      "type": "secret"
+    }
+  ],
+  "functions": {
+    "api/create-checkout-session.js": {
+      "memory": 128,
+      "maxDuration": 10
+    },
+    "api/stripe-webhook.ts": {
+      "memory": 128,
+      "maxDuration": 30
+    }
+  }
 }
