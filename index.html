@@ -264,11 +264,6 @@
             opacity: 0.85;
         }
 
-        .submit-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
         .auth-message {
             text-align: center;
             margin-top: 20px;
@@ -686,7 +681,6 @@
         <!-- TechPro Gaming Hardware Guide Section -->
         <section class="guide-section">
             <div class="container">
-                <!-- Guide Header -->
                 <div class="guide-header">
                     <h2>TECHPRO PREMIUM</h2>
                     <h1>GAMING HARDWARE GUIDE</h1>
@@ -695,7 +689,6 @@
                     <p class="description">The ultimate, engineer-grade guide to building, tuning, and maintaining your high-performance gaming PC.</p>
                 </div>
 
-                <!-- Value Pillars -->
                 <div class="pillar-grid">
                     <div class="pillar-card">
                         <h3>✓ Avoid DOA Frustration</h3>
@@ -715,12 +708,10 @@
                     </div>
                 </div>
 
-                <!-- CTA Button -->
                 <div class="cta-container">
                     <button class="cta-button" onclick="goToRegister()">GET THE TECHPRO GUIDE NOW</button>
                 </div>
 
-                <!-- Table of Contents -->
                 <div class="toc-section">
                     <h3>Table of Contents</h3>
                     <ol>
@@ -735,7 +726,6 @@
                     </ol>
                 </div>
 
-                <!-- Introduction Section -->
                 <div class="guide-content">
                     <h2>I. Introduction & The TechPro Difference</h2>
                     <p>This guide is your definitive, engineer-grade reference for selecting, assembling, optimising, and maintaining a high-performance gaming PC.</p>
@@ -758,7 +748,6 @@
             <div class="container">
                 <h2>Choose Your Plan</h2>
                 <div class="pricing-grid">
-                    <!-- Free Plan -->
                     <div class="pricing-card">
                         <h3>Free</h3>
                         <div class="price">£0<span style="font-size: 1rem;">/mo</span></div>
@@ -770,7 +759,6 @@
                         <div class="current-plan">✓ Current Plan</div>
                     </div>
 
-                    <!-- Premium Plan -->
                     <div class="pricing-card premium">
                         <div class="badge">Most Popular</div>
                         <h3>Premium</h3>
@@ -783,7 +771,6 @@
                             <li>Complete Hardware Guide</li>
                         </ul>
                         <button class="cta-button" onclick="goToRegister()">Upgrade to Premium</button>
-                        <div id="checkout-status"></div>
                     </div>
                 </div>
             </div>
@@ -801,7 +788,6 @@
                     <button onclick="switchTab('login')">Login</button>
                 </div>
 
-                <!-- Register Tab -->
                 <div id="register-tab" class="pricing-options active">
                     <form onsubmit="handleRegister(event)">
                         <div class="form-group">
@@ -838,7 +824,6 @@
                     </form>
                 </div>
 
-                <!-- Login Tab -->
                 <div id="login-tab" class="pricing-options">
                     <form onsubmit="handleLogin(event)">
                         <div class="form-group">
@@ -861,7 +846,7 @@
         </section>
     </div>
 
-    <!-- Footer (visible on all pages) -->
+    <!-- Footer -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
@@ -873,7 +858,6 @@
                 <ul>
                     <li><a onclick="goToPricing()">Pricing</a></li>
                     <li><a onclick="goToHome()">Features</a></li>
-                    <li><a onclick="goToHome()">Hardware Guide</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -889,34 +873,27 @@
         </div>
     </footer>
 
-    <script type="module">
-        import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
-
-        const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-        const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-        const supabase = createClient(supabaseUrl, supabaseAnonKey);
-
+    <script>
         // Page Navigation
-        window.goToHome = function() {
+        function goToHome() {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('home-page').classList.add('active');
-        };
+        }
 
-        window.goToRegister = function() {
+        function goToRegister() {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById('register-page').classList.add('active');
-        };
+        }
 
-        window.goToPricing = function() {
+        function goToPricing() {
             goToHome();
             setTimeout(() => {
                 document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
             }, 100);
-        };
+        }
 
         // Tab Switching
-        window.switchTab = function(tab) {
+        function switchTab(tab) {
             document.querySelectorAll('.pricing-options').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.auth-tabs button').forEach(el => el.classList.remove('active'));
 
@@ -928,17 +905,17 @@
             } else {
                 document.getElementById('auth-toggle-text').innerHTML = "Don't have an account? <a onclick=\"switchTab('register')\">Register here</a>";
             }
-        };
+        }
 
         // Plan Selection
-        window.selectPlan = function(element, plan) {
+        function selectPlan(element, plan) {
             document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
             element.classList.add('selected');
             document.getElementById('selected-plan').value = plan;
-        };
+        }
 
         // Registration Handler
-        window.handleRegister = async function(e) {
+        function handleRegister(e) {
             e.preventDefault();
             const email = document.getElementById('register-email').value;
             const password = document.getElementById('register-password').value;
@@ -950,100 +927,16 @@
                 return;
             }
 
-            try {
-                // Sign up with Supabase
-                const { data, error } = await supabase.auth.signUp({
-                    email,
-                    password,
-                });
-
-                if (error) {
-                    alert('Registration failed: ' + error.message);
-                    return;
-                }
-
-                if (plan === 'guide') {
-                    // £9.99 Gaming Hardware Guide
-                    processGuidePayment(email, data.user.id, 999);
-                } else {
-                    // £29.99 TechPro Premium subscription
-                    processPremiumPayment(email, data.user.id, 2999);
-                }
-
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        };
+            alert(`Registration successful!\nEmail: ${email}\nPlan: ${plan === 'guide' ? 'Gaming Hardware Guide (£9.99)' : 'TechPro Premium (£29.99/mo)'}\n\nRedirecting to payment...`);
+            goToHome();
+        }
 
         // Login Handler
-        window.handleLogin = async function(e) {
+        function handleLogin(e) {
             e.preventDefault();
             const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-
-            try {
-                const { data, error } = await supabase.auth.signInWithPassword({
-                    email,
-                    password,
-                });
-
-                if (error) {
-                    alert('Login failed: ' + error.message);
-                    return;
-                }
-
-                alert('Login successful! Welcome back!');
-                goToHome();
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
-        };
-
-        // Payment Processing Functions
-        function processGuidePayment(email, userId, amount) {
-            alert(`Processing Gaming Hardware Guide purchase of £${(amount/100).toFixed(2)}...`);
-            createPaymentIntent(email, userId, amount, 'guide');
-        }
-
-        function processPremiumPayment(email, userId, amount) {
-            alert(`Processing TechPro Premium subscription of £${(amount/100).toFixed(2)}/month...`);
-            createPaymentIntent(email, userId, amount, 'premium');
-        }
-
-        async function createPaymentIntent(email, userId, amount, type) {
-            try {
-                const { data: { session } } = await supabase.auth.getSession();
-                const jwt = session?.access_token;
-
-                if (!jwt) {
-                    alert('Session expired. Please login again.');
-                    return;
-                }
-
-                const response = await fetch(`${supabaseUrl}/functions/v1/create-checkout-session`, {
-                    method: 'POST',
-                    headers: {
-                        'Authorization': `Bearer ${jwt}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        email,
-                        userId,
-                        amount,
-                        type
-                    })
-                });
-
-                const data = await response.json();
-
-                if (data.url) {
-                    window.location.href = data.url;
-                } else {
-                    alert('Payment initialization failed. Please try again.');
-                }
-            } catch (error) {
-                alert('Error: ' + error.message);
-            }
+            alert(`Welcome back, ${email}!`);
+            goToHome();
         }
     </script>
 </body>
