@@ -219,4 +219,3 @@ Built with ❤️ using Vercel, Stripe & Supabase
 
 Last Updated: January 2026
 
-Ask a question...
