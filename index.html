@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TechPro Premium | Boost Your Workflow</title>
     <style>
-        /* CSS Variables & Base Theme */
         :root {
             --navy: #0B1222;
             --cyan: #00FFFF;
@@ -31,6 +30,14 @@
             line-height: 1.6;
         }
 
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
         /* Navigation */
         nav {
             background-color: rgba(11, 18, 34, 0.95);
@@ -48,6 +55,7 @@
             font-size: 1.5rem;
             font-weight: bold;
             color: var(--cyan);
+            cursor: pointer;
         }
 
         nav ul {
@@ -56,13 +64,16 @@
             gap: 30px;
         }
 
-        nav a {
+        nav button {
+            background: none;
+            border: none;
             color: var(--text-white);
-            text-decoration: none;
+            font-size: 1rem;
+            cursor: pointer;
             transition: color 0.2s ease;
         }
 
-        nav a:hover {
+        nav button:hover {
             color: var(--cyan);
         }
 
@@ -95,7 +106,7 @@
             margin-right: auto;
         }
 
-        .hero .cta-button {
+        .cta-button {
             display: inline-block;
             background-color: var(--cyan);
             color: var(--navy);
@@ -111,8 +122,167 @@
             border: none;
         }
 
-        .hero .cta-button:hover {
+        .cta-button:hover {
             opacity: 0.85;
+        }
+
+        .cta-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        /* Registration Page */
+        .auth-container {
+            max-width: 500px;
+            margin: 100px auto;
+            background: var(--dark-grey);
+            padding: 40px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .auth-container h2 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: var(--cyan);
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: var(--text-white);
+            font-weight: bold;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            background: var(--navy);
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            color: var(--text-white);
+            font-size: 1rem;
+        }
+
+        .form-group input::placeholder {
+            color: var(--slate);
+        }
+
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .auth-tabs button {
+            flex: 1;
+            padding: 12px;
+            background: var(--navy);
+            border: 2px solid var(--border);
+            color: var(--text-white);
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: all 0.2s ease;
+        }
+
+        .auth-tabs button.active {
+            border-color: var(--cyan);
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .pricing-options {
+            display: none;
+        }
+
+        .pricing-options.active {
+            display: block;
+        }
+
+        .option-cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .option-card {
+            background: var(--navy);
+            border: 2px solid var(--border);
+            padding: 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .option-card:hover {
+            border-color: var(--cyan);
+        }
+
+        .option-card.selected {
+            border-color: var(--cyan);
+            background: rgba(0, 255, 255, 0.1);
+        }
+
+        .option-card h3 {
+            color: var(--cyan);
+            margin-bottom: 10px;
+        }
+
+        .option-card .price {
+            font-size: 2rem;
+            color: var(--green);
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .option-card .description {
+            color: var(--slate);
+            font-size: 0.9rem;
+        }
+
+        .submit-button {
+            width: 100%;
+            padding: 14px;
+            background: var(--cyan);
+            color: var(--navy);
+            border: none;
+            border-radius: 4px;
+            font-weight: bold;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: opacity 0.2s ease;
+        }
+
+        .submit-button:hover {
+            opacity: 0.85;
+        }
+
+        .submit-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .auth-message {
+            text-align: center;
+            margin-top: 20px;
+            color: var(--slate);
+        }
+
+        .auth-message a {
+            color: var(--cyan);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .auth-message a:hover {
+            text-decoration: underline;
         }
 
         /* TechPro Guide Section */
@@ -163,7 +333,6 @@
             margin: 0 auto;
         }
 
-        /* Pillar Grid */
         .pillar-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -201,38 +370,11 @@
             line-height: 1.7;
         }
 
-        /* CTA Container */
         .cta-container {
             text-align: center;
             margin: 50px 0;
         }
 
-        .cta-button {
-            display: inline-block;
-            background-color: var(--cyan);
-            color: var(--navy);
-            font-weight: bold;
-            font-size: 1rem;
-            padding: 18px 50px;
-            border-radius: 4px;
-            text-decoration: none;
-            text-transform: uppercase;
-            letter-spacing: 0.1em;
-            transition: opacity 0.2s ease;
-            cursor: pointer;
-            border: none;
-        }
-
-        .cta-button:hover {
-            opacity: 0.85;
-        }
-
-        .cta-button:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* TOC Section */
         .toc-section {
             background: var(--dark-grey);
             border-left: 5px solid var(--cyan);
@@ -254,11 +396,6 @@
             margin-left: 25px;
         }
 
-        .toc-section li {
-            margin-bottom: 8px;
-        }
-
-        /* Guide Content */
         .guide-content {
             margin: 60px 0;
         }
@@ -292,7 +429,6 @@
             margin-bottom: 10px;
         }
 
-        /* Pro Tip Box */
         .pro-tip-box {
             border-left: 5px solid var(--cyan);
             background: rgba(0, 255, 255, 0.05);
@@ -352,6 +488,7 @@
             border-radius: 8px;
             padding: 40px 30px;
             transition: border-color 0.2s ease, transform 0.2s ease;
+            position: relative;
         }
 
         .pricing-card.premium {
@@ -408,6 +545,10 @@
             text-transform: uppercase;
             margin-bottom: 20px;
             font-weight: bold;
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
         }
 
         .pricing-card .current-plan {
@@ -451,6 +592,15 @@
             letter-spacing: 0.1em;
         }
 
+        .footer-section {
+            color: var(--slate);
+        }
+
+        .footer-section p {
+            color: var(--slate);
+            line-height: 1.6;
+        }
+
         .footer-section ul {
             list-style: none;
         }
@@ -474,7 +624,6 @@
             border-top: 1px solid var(--border);
         }
 
-        /* Responsive */
         @media (max-width: 768px) {
             nav {
                 padding: 15px 20px;
@@ -484,6 +633,7 @@
 
             nav ul {
                 gap: 15px;
+                flex-direction: column;
             }
 
             .hero h1 {
@@ -505,284 +655,225 @@
             .pricing-section h2 {
                 font-size: 2rem;
             }
+
+            .option-cards {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <!-- Navigation -->
     <nav>
-        <div class="logo">TechPro</div>
+        <div class="logo" onclick="goToHome()">TechPro</div>
         <ul>
-            <li><a href="#home">Home</a></li>
-            <li><a href="#pricing">Pricing</a></li>
+            <li><button onclick="goToHome()">Home</button></li>
+            <li><button onclick="goToPricing()">Pricing</button></li>
         </ul>
     </nav>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="container">
-            <h1>Scale Your Productivity with TechPro</h1>
-            <p>The ultimate toolkit for modern professionals. Get the edge with TechPro Premium.</p>
-            <button class="cta-button" onclick="document.getElementById('pricing').scrollIntoView({behavior: 'smooth'})">Join TechPro Today</button>
-        </div>
-    </section>
-
-    <!-- TechPro Gaming Hardware Guide Section -->
-    <section class="guide-section">
-        <div class="container">
-            <!-- Guide Header -->
-            <div class="guide-header">
-                <h2>TECHPRO PREMIUM</h2>
-                <h1>GAMING HARDWARE GUIDE</h1>
-                <p class="tagline">Stop Guessing. Start Building Like a Pro.</p>
-                <p class="subtitle">Build · Tune · Maintain · Dominate</p>
-                <p class="description">The ultimate, engineer-grade guide to building, tuning, and maintaining your high-performance gaming PC.</p>
+    <!-- HOME PAGE -->
+    <div id="home-page" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="container">
+                <h1>Scale Your Productivity with TechPro</h1>
+                <p>The ultimate toolkit for modern professionals. Get the edge with TechPro Premium.</p>
+                <button class="cta-button" onclick="goToRegister()">Join TechPro Today</button>
             </div>
+        </section>
 
-            <!-- Value Pillars -->
-            <div class="pillar-grid">
-                <div class="pillar-card">
-                    <h3>✓ Avoid DOA Frustration</h3>
-                    <p>Our "Breadboarding" method tests parts before they touch the case.</p>
-                </div>
-                <div class="pillar-card">
-                    <h3>✓ Unlock Hidden Frames</h3>
-                    <p>"Eco-Pro" Undervolting secrets the manuals never mention.</p>
-                </div>
-                <div class="pillar-card">
-                    <h3>✓ Pro-Grade Troubleshooting</h3>
-                    <p>Q-LED Diagnostic Matrix identifies errors in seconds — no forums needed.</p>
-                </div>
-                <div class="pillar-card">
-                    <h3>✓ Lifetime Value</h3>
-                    <p>TechPro Maintenance Calendar keeps your PC fast for years to come.</p>
-                </div>
-            </div>
-
-            <!-- CTA Button -->
-            <div class="cta-container">
-                <button class="cta-button" id="guide-cta-btn" onclick="handleGuideAccess()">GET THE TECHPRO GUIDE NOW</button>
-            </div>
-
-            <!-- Table of Contents -->
-            <div class="toc-section">
-                <h3>Table of Contents</h3>
-                <ol>
-                    <li>Introduction & The TechPro Difference</li>
-                    <li>Hardware Recommendations</li>
-                    <li>Build Configuration — The Breadboarding Method</li>
-                    <li>Eco-Pro Undervolting & Performance Optimisation</li>
-                    <li>Q-LED Diagnostic Matrix & Troubleshooting</li>
-                    <li>TechPro Maintenance Calendar</li>
-                    <li>Premium Access & Customer Welcome</li>
-                    <li>Web Styling Reference (CSS for Bolt)</li>
-                </ol>
-            </div>
-
-            <!-- Introduction Section -->
-            <div class="guide-content">
-                <h2>I. Introduction & The TechPro Difference</h2>
-                <p>This guide is your definitive, engineer-grade reference for selecting, assembling, optimising, and maintaining a high-performance gaming PC. It is built on four principles that set it apart from generic tutorials:</p>
-
-                <div class="pro-tip-box">
-                    <div class="tip-title">The TechPro Four Pillars</div>
-                    <ul>
-                        <li><strong>Breadboarding First</strong> — Test all components outside the case before assembly to eliminate DOA failures</li>
-                        <li><strong>Eco-Pro Undervolting</strong> — Extract hidden performance by reducing voltage, not just adding MHz</li>
-                        <li><strong>Q-LED Diagnostic Matrix</strong> — Instant error identification without forum-diving or trial-and-error</li>
-                        <li><strong>Maintenance Calendar</strong> — Structured annual care plan to sustain peak performance long-term</li>
-                    </ul>
+        <!-- TechPro Gaming Hardware Guide Section -->
+        <section class="guide-section">
+            <div class="container">
+                <!-- Guide Header -->
+                <div class="guide-header">
+                    <h2>TECHPRO PREMIUM</h2>
+                    <h1>GAMING HARDWARE GUIDE</h1>
+                    <p class="tagline">Stop Guessing. Start Building Like a Pro.</p>
+                    <p class="subtitle">Build · Tune · Maintain · Dominate</p>
+                    <p class="description">The ultimate, engineer-grade guide to building, tuning, and maintaining your high-performance gaming PC.</p>
                 </div>
 
-                <p>Whether you are building your first rig or your fiftieth, this guide is designed to ensure precision, stability, and maximum performance at every stage of ownership.</p>
-            </div>
-
-            <!-- Hardware Recommendations Section -->
-            <div class="guide-content">
-                <h2>II. Hardware Recommendations</h2>
-                <p>The components below represent a high-end build tier optimised for 1440p–4K gaming at maximum settings. Each recommendation is justified by thermal efficiency, benchmark performance, and long-term driver support.</p>
-
-                <div class="pro-tip-box">
-                    <div class="tip-title">Recommended Components</div>
-                    <ul>
-                        <li><strong>CPU:</strong> AMD Ryzen 9 5900X / Intel Core i9-11900K — 12-core vs 8-core; both excel at 1080p–4K gaming</li>
-                        <li><strong>Motherboard:</strong> X570 (AMD) / Z590 (Intel) — PCIe 4.0 support; match socket to CPU</li>
-                        <li><strong>RAM:</strong> 32 GB DDR4-3600 (or DDR5) — Dual-channel; higher MHz = better CPU performance</li>
-                        <li><strong>GPU:</strong> NVIDIA RTX 3080 / AMD RX 6800 XT — Primary driver of gaming performance; VRAM is key</li>
-                        <li><strong>Storage:</strong> 1 TB NVMe SSD (PCIe 4.0) — Up to 7,000 MB/s read — 2x faster than Gen 3</li>
-                        <li><strong>Case:</strong> Mid-tower, mesh front panel — Positive pressure airflow; 2+ intake fans minimum</li>
-                        <li><strong>PSU:</strong> 850W 80+ Gold, fully modular — Overhead for GPU spikes; 87–90% efficiency</li>
-                    </ul>
+                <!-- Value Pillars -->
+                <div class="pillar-grid">
+                    <div class="pillar-card">
+                        <h3>✓ Avoid DOA Frustration</h3>
+                        <p>Our "Breadboarding" method tests parts before they touch the case.</p>
+                    </div>
+                    <div class="pillar-card">
+                        <h3>✓ Unlock Hidden Frames</h3>
+                        <p>"Eco-Pro" Undervolting secrets the manuals never mention.</p>
+                    </div>
+                    <div class="pillar-card">
+                        <h3>✓ Pro-Grade Troubleshooting</h3>
+                        <p>Q-LED Diagnostic Matrix identifies errors in seconds — no forums needed.</p>
+                    </div>
+                    <div class="pillar-card">
+                        <h3>✓ Lifetime Value</h3>
+                        <p>TechPro Maintenance Calendar keeps your PC fast for years to come.</p>
+                    </div>
                 </div>
 
-                <h3>GPU — Your Frame Rate Engine</h3>
-                <ul>
-                    <li><strong>RTX 3080:</strong> 10 GB GDDR6X — exceptional 4K, DLSS support, ray tracing flagship</li>
-                    <li><strong>RX 6800 XT:</strong> 16 GB GDDR6 — superior VRAM, best rasterisation at 1440p</li>
-                    <li>VRAM of 10–16 GB is required for modern AAA titles at high resolutions</li>
-                </ul>
-
-                <h3>CPU & RAM — Feeding the Pipeline</h3>
-                <ul>
-                    <li>Enable XMP/EXPO in BIOS immediately after first boot — free 10–15% performance gain</li>
-                    <li>32 GB is the sweet spot; 16 GB minimum for modern titles</li>
-                    <li>Dual-channel (2 sticks) always outperforms single-channel of the same capacity</li>
-                </ul>
-            </div>
-
-            <!-- Breadboarding Section -->
-            <div class="guide-content">
-                <h2>III. Build Configuration — The Breadboarding Method</h2>
-                <p>The Breadboarding Method means testing your full component stack OUTSIDE the case before installation.</p>
-
-                <div class="pro-tip-box">
-                    <div class="tip-title">PRO METHOD: Breadboard Before You Build</div>
-                    <ul>
-                        <li>Place your motherboard on its anti-static bag. Install CPU, one RAM stick, and GPU. Connect PSU cables.</li>
-                        <li>Power on and verify POST (you see BIOS/logo). This eliminates DOA parts and case-induced short circuits.</li>
-                        <li>If it does not POST here, the fault is in the components — not your cable management.</li>
-                    </ul>
+                <!-- CTA Button -->
+                <div class="cta-container">
+                    <button class="cta-button" onclick="goToRegister()">GET THE TECHPRO GUIDE NOW</button>
                 </div>
 
-                <h3>Pre-Flight Checklist — Open This Before Touching Any Box</h3>
-                <ul>
-                    <li>☐ Anti-static wrist strap worn and grounded to case metal</li>
-                    <li>☐ Work surface is non-carpeted and clear of clutter</li>
-                    <li>☐ All component boxes inspected visually for shipping damage</li>
-                    <li>☐ Motherboard manual downloaded and open to the pinout diagram</li>
-                    <li>☐ Thermal paste applicator ready (pea-sized amount on CPU IHS)</li>
-                    <li>☐ Phillips screwdriver with magnetised tip available</li>
-                    <li>☐ Cable ties and velcro straps ready for cable management phase</li>
-                </ul>
-
-                <h3>Airflow Targets — Know These Numbers</h3>
-                <ul>
-                    <li><strong>CPU under full load (Prime95):</strong> target ≤ 90°C, ideal 70–80°C</li>
-                    <li><strong>GPU under full load (Furmark/3DMark):</strong> target ≤ 85°C, ideal 75–80°C</li>
-                    <li><strong>Case ambient:</strong> if over 35°C, add an intake fan or increase fan curve in BIOS</li>
-                    <li><strong>Positive pressure:</strong> slightly more intake than exhaust reduces dust accumulation by ~40%</li>
-                </ul>
-            </div>
-
-            <!-- Eco-Pro Undervolting Section -->
-            <div class="guide-content">
-                <h2>IV. Eco-Pro Undervolting & Performance Optimisation</h2>
-                <p>Undervolting is the practice of reducing the voltage supplied to your CPU or GPU while maintaining the same (or higher) clock speeds. It is the single most impactful free performance upgrade most builders never apply.</p>
-
-                <div class="pro-tip-box">
-                    <div class="tip-title">Why Undervolting Works — The Engineering Explanation</div>
-                    <ul>
-                        <li>Stock voltages are set conservatively by manufacturers to cover the worst-case silicon quality.</li>
-                        <li>Your specific chip almost certainly runs stably at lower voltage — less heat, less noise, higher sustained boost clocks.</li>
-                        <li>"Eco-Pro" = undervolt first, then overclock second. Cooler chip = longer boost duration = more frames.</li>
-                    </ul>
+                <!-- Table of Contents -->
+                <div class="toc-section">
+                    <h3>Table of Contents</h3>
+                    <ol>
+                        <li>Introduction & The TechPro Difference</li>
+                        <li>Hardware Recommendations</li>
+                        <li>Build Configuration — The Breadboarding Method</li>
+                        <li>Eco-Pro Undervolting & Performance Optimisation</li>
+                        <li>Q-LED Diagnostic Matrix & Troubleshooting</li>
+                        <li>TechPro Maintenance Calendar</li>
+                        <li>Premium Access & Customer Welcome</li>
+                        <li>Web Styling Reference (CSS for Bolt)</li>
+                    </ol>
                 </div>
 
-                <h3>CPU Undervolting & Overclocking</h3>
-                <p><strong>Step 1 — Enable XMP/EXPO (Do This First, Always)</strong></p>
-                <ul>
-                    <li>Enter BIOS (DEL or F2 on boot) → Advanced Memory Settings → Enable XMP/EXPO Profile</li>
-                    <li>This is a free, manufacturer-supported overclock of your RAM to its rated speed</li>
-                    <li>Impact: 10–15% CPU performance improvement, zero stability risk</li>
-                </ul>
+                <!-- Introduction Section -->
+                <div class="guide-content">
+                    <h2>I. Introduction & The TechPro Difference</h2>
+                    <p>This guide is your definitive, engineer-grade reference for selecting, assembling, optimising, and maintaining a high-performance gaming PC.</p>
 
-                <p><strong>Step 2 — CPU Undervolting</strong></p>
-                <ul>
-                    <li><strong>AMD Ryzen:</strong> Enable PBO2 in BIOS → Curve Optimiser → set All Core to -20 to -30 as starting point</li>
-                    <li><strong>Intel:</strong> Use ThrottleStop or XTU to reduce core voltage offset by -80mV to -120mV</li>
-                    <li>Run Cinebench R23 multi-core 3x — if stable, increase the offset in small increments</li>
-                    <li>Use HWiNFO64 to monitor Tdie/Tjmax — target peak under 85°C during Cinebench</li>
-                </ul>
-
-                <h3>GPU Eco-Pro Undervolting (MSI Afterburner)</h3>
-                <ul>
-                    <li>Download MSI Afterburner → open Voltage/Frequency Curve editor (Ctrl+F)</li>
-                    <li>Identify your card's current max boost point (e.g 1900 MHz @ 1050mV)</li>
-                    <li>Flatten the curve: drag all voltage points above your target down to the same frequency</li>
-                    <li>Example: lock 1950 MHz at 950mV instead of the stock 1050mV — same speed, 100mV cooler</li>
-                    <li>Test with 3DMark Time Spy 3x — if it crashes, raise voltage by 12.5mV and retest</li>
-                </ul>
-            </div>
-
-            <!-- Maintenance Section -->
-            <div class="guide-content">
-                <h2>VI. TechPro Maintenance Calendar</h2>
-                <p>Peak performance is not maintained by hardware alone — it requires systematic care. This calendar ensures your build performs at launch-day levels for years.</p>
-
-                <div class="pro-tip-box">
-                    <div class="tip-title">Maintenance Schedule</div>
-                    <ul>
-                        <li><strong>Weekly:</strong> Check HWiNFO64 temps during gaming session</li>
-                        <li><strong>Monthly:</strong> Update GPU drivers via GeForce Experience / Adrenalin</li>
-                        <li><strong>Monthly:</strong> Run CrystalDiskInfo — check NVMe health & temps</li>
-                        <li><strong>Every 3 months:</strong> Clean dust filters on front intakes and PSU vent</li>
-                        <li><strong>Every 6 months:</strong> Full interior dust clean with compressed air</li>
-                        <li><strong>Every 6 months:</strong> Re-apply thermal paste on CPU</li>
-                        <li><strong>Annually:</strong> Full re-seat of GPU, RAM, and NVMe SSD</li>
-                        <li><strong>Annually:</strong> Re-run Eco-Pro undervolting calibration</li>
-                    </ul>
-                </div>
-
-                <h3>Maintenance Pro Tips</h3>
-                <ul>
-                    <li>Never clean fans while powered on — hold fan blades still while using compressed air to prevent overspeed damage</li>
-                    <li>Isopropyl alcohol (90%+) only for contact cleaning — never WD-40 or household cleaners near electronics</li>
-                    <li>Keep a build log (date, changes, temps before/after) — invaluable for spotting thermal degradation trends</li>
-                    <li>NVMe drives above 80% capacity show measurable write speed reduction — keep headroom</li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <!-- Pricing Section -->
-    <section class="pricing-section" id="pricing">
-        <div class="container">
-            <h2>Choose Your Plan</h2>
-            <div class="pricing-grid">
-                <!-- Free Plan -->
-                <div class="pricing-card">
-                    <h3>Free</h3>
-                    <div class="price">£0<span style="font-size: 1rem;">/mo</span></div>
-                    <div class="billing"></div>
-                    <ul>
-                        <li>Standard Support</li>
-                        <li>Basic Access</li>
-                    </ul>
-                    <div class="current-plan">✓ Current Plan</div>
-                </div>
-
-                <!-- Premium Plan -->
-                <div class="pricing-card premium">
-                    <div class="badge">Most Popular</div>
-                    <h3>Premium</h3>
-                    <div class="price">£29<span style="font-size: 1rem;">/mo</span></div>
-                    <div class="billing"></div>
-                    <ul>
-                        <li>24/7 Priority Support</li>
-                        <li>Full Content Library</li>
-                        <li>Early Feature Access</li>
-                        <li>Complete Hardware Guide</li>
-                    </ul>
-                    <button class="cta-button" id="checkout-btn">Upgrade to TechPro Premium</button>
-                    <div id="checkout-status"></div>
+                    <div class="pro-tip-box">
+                        <div class="tip-title">The TechPro Four Pillars</div>
+                        <ul>
+                            <li><strong>Breadboarding First</strong> — Test all components outside the case before assembly to eliminate DOA failures</li>
+                            <li><strong>Eco-Pro Undervolting</strong> — Extract hidden performance by reducing voltage, not just adding MHz</li>
+                            <li><strong>Q-LED Diagnostic Matrix</strong> — Instant error identification without forum-diving or trial-and-error</li>
+                            <li><strong>Maintenance Calendar</strong> — Structured annual care plan to sustain peak performance long-term</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Footer -->
+        <!-- Pricing Section -->
+        <section class="pricing-section">
+            <div class="container">
+                <h2>Choose Your Plan</h2>
+                <div class="pricing-grid">
+                    <!-- Free Plan -->
+                    <div class="pricing-card">
+                        <h3>Free</h3>
+                        <div class="price">£0<span style="font-size: 1rem;">/mo</span></div>
+                        <div class="billing"></div>
+                        <ul>
+                            <li>Standard Support</li>
+                            <li>Basic Access</li>
+                        </ul>
+                        <div class="current-plan">✓ Current Plan</div>
+                    </div>
+
+                    <!-- Premium Plan -->
+                    <div class="pricing-card premium">
+                        <div class="badge">Most Popular</div>
+                        <h3>Premium</h3>
+                        <div class="price">£29.99<span style="font-size: 1rem;">/mo</span></div>
+                        <div class="billing">Subscription</div>
+                        <ul>
+                            <li>24/7 Priority Support</li>
+                            <li>Full Content Library</li>
+                            <li>Early Feature Access</li>
+                            <li>Complete Hardware Guide</li>
+                        </ul>
+                        <button class="cta-button" onclick="goToRegister()">Upgrade to Premium</button>
+                        <div id="checkout-status"></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- REGISTRATION PAGE -->
+    <div id="register-page" class="page">
+        <section style="padding: 50px 20px;">
+            <div class="auth-container">
+                <h2>TechPro Premium Access</h2>
+
+                <div class="auth-tabs">
+                    <button class="active" onclick="switchTab('register')">Register</button>
+                    <button onclick="switchTab('login')">Login</button>
+                </div>
+
+                <!-- Register Tab -->
+                <div id="register-tab" class="pricing-options active">
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="register-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="register-password" placeholder="Enter password" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Confirm Password</label>
+                            <input type="password" id="register-confirm" placeholder="Confirm password" required>
+                        </div>
+
+                        <label style="color: var(--cyan); font-weight: bold; margin-bottom: 15px; display: block;">Choose Your Plan</label>
+                        
+                        <div class="option-cards">
+                            <div class="option-card selected" onclick="selectPlan(this, 'guide')">
+                                <h3>Gaming Hardware Guide</h3>
+                                <div class="price">£9.99</div>
+                                <div class="description">One-time purchase</div>
+                            </div>
+                            <div class="option-card" onclick="selectPlan(this, 'premium')">
+                                <h3>TechPro Premium</h3>
+                                <div class="price">£29.99/mo</div>
+                                <div class="description">Subscription</div>
+                            </div>
+                        </div>
+
+                        <input type="hidden" id="selected-plan" value="guide">
+
+                        <button type="submit" class="submit-button">Create Account & Purchase</button>
+                    </form>
+                </div>
+
+                <!-- Login Tab -->
+                <div id="login-tab" class="pricing-options">
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="email" id="login-email" placeholder="Enter your email" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" id="login-password" placeholder="Enter password" required>
+                        </div>
+
+                        <button type="submit" class="submit-button">Login</button>
+                    </form>
+                </div>
+
+                <div class="auth-message">
+                    <p id="auth-toggle-text">Don't have an account? <a onclick="switchTab('register')">Register here</a></p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer (visible on all pages) -->
     <footer>
         <div class="footer-content">
             <div class="footer-section">
                 <h4>About TechPro</h4>
-                <p style="color: var(--slate); line-height: 1.6;">Empowering professionals with premium tools. Built for speed, designed for security.</p>
+                <p>Empowering professionals with premium tools. Built for speed, designed for security.</p>
             </div>
             <div class="footer-section">
                 <h4>Product</h4>
                 <ul>
-                    <li><a href="#pricing">Pricing</a></li>
-                    <li><a href="#home">Features</a></li>
-                    <li><a href="#guide">Hardware Guide</a></li>
+                    <li><a onclick="goToPricing()">Pricing</a></li>
+                    <li><a onclick="goToHome()">Features</a></li>
+                    <li><a onclick="goToHome()">Hardware Guide</a></li>
                 </ul>
             </div>
             <div class="footer-section">
@@ -798,133 +889,162 @@
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script type="module">
         import { createClient } from "https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm";
 
         const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
         const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
-        const checkoutBtn = document.getElementById("checkout-btn");
-        const checkoutStatus = document.getElementById("checkout-status");
-
-        function setStatus(msg, isError = false) {
-            if (!checkoutStatus) return;
-            checkoutStatus.textContent = msg || "";
-            checkoutStatus.style.color = isError ? "#b00020" : "#10B981";
-        }
-
-        if (!supabaseUrl || !supabaseAnonKey) {
-            setStatus("App misconfigured: missing VITE_SUPABASE_URL / VITE_SUPABASE_ANON_KEY.", true);
-            if (checkoutBtn) checkoutBtn.disabled = true;
-            throw new Error("Missing VITE_SUPABASE_URL or VITE_SUPABASE_ANON_KEY.");
-        }
-
         const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-        async function updateCurrentPlanUI() {
-            const { data: { user }, error: userErr } = await supabase.auth.getUser();
-            if (userErr || !user) return;
+        // Page Navigation
+        window.goToHome = function() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('home-page').classList.add('active');
+        };
 
-            const { data: accessRow, error: accessErr } = await supabase
-                .from("user_access")
-                .select("is_premium_subscriber")
-                .eq("user_id", user.id)
-                .maybeSingle();
+        window.goToRegister = function() {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById('register-page').classList.add('active');
+        };
 
-            if (accessErr || !accessRow) return;
+        window.goToPricing = function() {
+            goToHome();
+            setTimeout(() => {
+                document.querySelector('.pricing-section').scrollIntoView({ behavior: 'smooth' });
+            }, 100);
+        };
 
-            const isPremium = !!accessRow.is_premium_subscriber;
+        // Tab Switching
+        window.switchTab = function(tab) {
+            document.querySelectorAll('.pricing-options').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.auth-tabs button').forEach(el => el.classList.remove('active'));
 
-            if (isPremium) {
-                if (checkoutBtn) checkoutBtn.disabled = true;
-                setStatus("You already have TechPro Premium ✅");
+            document.getElementById(tab + '-tab').classList.add('active');
+            event.target.classList.add('active');
+
+            if (tab === 'register') {
+                document.getElementById('auth-toggle-text').innerHTML = "Already have an account? <a onclick=\"switchTab('login')\">Login here</a>";
             } else {
-                setStatus("");
-                if (checkoutBtn) checkoutBtn.disabled = false;
+                document.getElementById('auth-toggle-text').innerHTML = "Don't have an account? <a onclick=\"switchTab('register')\">Register here</a>";
             }
-        }
+        };
 
-        async function startTechProCheckout() {
+        // Plan Selection
+        window.selectPlan = function(element, plan) {
+            document.querySelectorAll('.option-card').forEach(card => card.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('selected-plan').value = plan;
+        };
+
+        // Registration Handler
+        window.handleRegister = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            const confirm = document.getElementById('register-confirm').value;
+            const plan = document.getElementById('selected-plan').value;
+
+            if (password !== confirm) {
+                alert('Passwords do not match!');
+                return;
+            }
+
             try {
-                if (checkoutBtn) checkoutBtn.disabled = true;
-                setStatus("Preparing checkout...");
-
-                const { data: { user }, error: userErr } = await supabase.auth.getUser();
-                if (userErr || !user) {
-                    setStatus("Please log in first.", true);
-                    if (checkoutBtn) checkoutBtn.disabled = false;
-                    return;
-                }
-
-                const { data: { session } } = await supabase.auth.getSession();
-                const jwt = session?.access_token;
-                if (!jwt) {
-                    setStatus("Session expired. Please log in again.", true);
-                    if (checkoutBtn) checkoutBtn.disabled = false;
-                    return;
-                }
-
-                const res = await fetch(`${supabaseUrl}/functions/v1/create-checkout-session`, {
-                    method: "POST",
-                    headers: {
-                        "Authorization": `Bearer ${jwt}`,
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({})
+                // Sign up with Supabase
+                const { data, error } = await supabase.auth.signUp({
+                    email,
+                    password,
                 });
 
-                const payload = await res.json().catch(() => ({}));
-
-                if (!res.ok) {
-                    setStatus(payload?.error ?? "Checkout failed. Please try again.", true);
-                    if (checkoutBtn) checkoutBtn.disabled = false;
+                if (error) {
+                    alert('Registration failed: ' + error.message);
                     return;
                 }
 
-                if (!payload?.url) {
-                    setStatus("Checkout URL missing from server response.", true);
-                    if (checkoutBtn) checkoutBtn.disabled = false;
+                if (plan === 'guide') {
+                    // £9.99 Gaming Hardware Guide
+                    processGuidePayment(email, data.user.id, 999);
+                } else {
+                    // £29.99 TechPro Premium subscription
+                    processPremiumPayment(email, data.user.id, 2999);
+                }
+
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        };
+
+        // Login Handler
+        window.handleLogin = async function(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+
+            try {
+                const { data, error } = await supabase.auth.signInWithPassword({
+                    email,
+                    password,
+                });
+
+                if (error) {
+                    alert('Login failed: ' + error.message);
                     return;
                 }
 
-                window.location.href = payload.url;
-            } catch (e) {
-                setStatus(e?.message ?? "Unexpected checkout error.", true);
-                if (checkoutBtn) checkoutBtn.disabled = false;
+                alert('Login successful! Welcome back!');
+                goToHome();
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        };
+
+        // Payment Processing Functions
+        function processGuidePayment(email, userId, amount) {
+            alert(`Processing Gaming Hardware Guide purchase of £${(amount/100).toFixed(2)}...`);
+            createPaymentIntent(email, userId, amount, 'guide');
+        }
+
+        function processPremiumPayment(email, userId, amount) {
+            alert(`Processing TechPro Premium subscription of £${(amount/100).toFixed(2)}/month...`);
+            createPaymentIntent(email, userId, amount, 'premium');
+        }
+
+        async function createPaymentIntent(email, userId, amount, type) {
+            try {
+                const { data: { session } } = await supabase.auth.getSession();
+                const jwt = session?.access_token;
+
+                if (!jwt) {
+                    alert('Session expired. Please login again.');
+                    return;
+                }
+
+                const response = await fetch(`${supabaseUrl}/functions/v1/create-checkout-session`, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Bearer ${jwt}`,
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        email,
+                        userId,
+                        amount,
+                        type
+                    })
+                });
+
+                const data = await response.json();
+
+                if (data.url) {
+                    window.location.href = data.url;
+                } else {
+                    alert('Payment initialization failed. Please try again.');
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
             }
         }
-
-        if (checkoutBtn) {
-            checkoutBtn.addEventListener("click", startTechProCheckout);
-        }
-
-        updateCurrentPlanUI();
-
-        // Guide CTA Handler
-        window.handleGuideAccess = function() {
-            const guideBtn = document.getElementById("guide-cta-btn");
-            supabase.auth.getUser().then(({ data: { user }, error }) => {
-                if (error || !user) {
-                    alert("Please log in to access the complete guide.");
-                    return;
-                }
-
-                supabase
-                    .from("user_access")
-                    .select("is_premium_subscriber")
-                    .eq("user_id", user.id)
-                    .maybeSingle()
-                    .then(({ data: accessRow }) => {
-                        if (accessRow?.is_premium_subscriber) {
-                            alert("✅ You have access! Download or view the full guide at: techpro.example.com/get-started");
-                        } else {
-                            alert("Upgrade to Premium to access the complete TechPro Gaming Hardware Guide!");
-                            document.getElementById("pricing").scrollIntoView({ behavior: 'smooth' });
-                        }
-                    });
-            });
-        };
     </script>
 </body>
-  </html>
+    </html>
