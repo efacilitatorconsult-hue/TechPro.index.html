@@ -8,7 +8,6 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Get user from authorization header (from Supabase JWT)
     const authHeader = req.headers.authorization;
     if (!authHeader) {
       return res.status(401).json({ error: 'Unauthorized: Missing authorization header' });
