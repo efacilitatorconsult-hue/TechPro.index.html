@@ -4,28 +4,20 @@
   "installCommand": "npm install",
   "framework": "static",
   "regions": ["iad1"],
-  "env": [
-    {
-      "key": "STRIPE_SECRET_KEY",
-      "description": "Stripe Secret API Key for payments",
-      "type": "secret"
+  "env": {
+    "STRIPE_SECRET_KEY": {
+      "description": "Stripe Secret API Key for payments"
     },
-    {
-      "key": "STRIPE_WEBHOOK_SECRET",
-      "description": "Stripe Webhook Signing Secret",
-      "type": "secret"
+    "STRIPE_WEBHOOK_SECRET": {
+      "description": "Stripe Webhook Signing Secret"
     },
-    {
-      "key": "VITE_SUPABASE_URL",
-      "description": "Supabase Project URL",
-      "type": "secret"
+    "VITE_SUPABASE_URL": {
+      "description": "Supabase Project URL"
     },
-    {
-      "key": "VITE_SUPABASE_ANON_KEY",
-      "description": "Supabase Anonymous Key",
-      "type": "secret"
+    "VITE_SUPABASE_ANON_KEY": {
+      "description": "Supabase Anonymous Key"
     }
-  ],
+  },
   "functions": {
     "api/create-checkout-session.js": {
       "memory": 128,
