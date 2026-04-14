@@ -2,7 +2,7 @@
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install",
-  "framework": "static",
+  "framework": null,
   "regions": ["iad1"],
   "env": {
     "STRIPE_SECRET_KEY": "string",
