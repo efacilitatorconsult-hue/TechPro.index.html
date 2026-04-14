@@ -1,5 +1,23 @@
-​The website is designed to be a high-conversion sales funnel with three primary objectives:
-​Educate: Inform potential customers about the value of the "Premium" tier (Priority Support, Exclusive Content, Security) through a clean, modern Hero Section and Features List.
-​Validate: Build trust using Social Proof (testimonials and industry endorsements) to reassure users of the product's quality.  
-​Convert: Guide users through a frictionless Pricing Comparison into a secure, professional Stripe Payment Flow to turn visitors into paying subscribers.
+# TechPro Premium - Gaming Hardware Guide
 
+A full-stack web application featuring the TechPro Gaming Hardware Guide with Stripe payments integration and Supabase authentication.
+
+## Features
+
+- 🎮 **Complete Gaming Hardware Guide** - Breadboarding method, Eco-Pro undervolting, Q-LED diagnostics, maintenance calendar
+- 💳 **Stripe Payment Integration** - Secure checkout with subscription management
+- 🔐 **Supabase Authentication** - User registration, login, and premium access tracking
+- 📱 **Responsive Design** - Mobile-first design with dark theme
+- ⚡ **Vercel Edge Functions** - Serverless API endpoints for checkout and webhooks
+- 🎨 **Modern UI** - Cyan and navy theme with smooth transitions
+
+## Tech Stack
+
+- **Frontend**: HTML5, CSS3, JavaScript (Vanilla)
+- **Backend**: Vercel Functions (Node.js)
+- **Payments**: Stripe (Checkout & Webhooks)
+- **Authentication**: Supabase Auth
+- **Database**: Supabase PostgreSQL
+- **Hosting**: Vercel
+
+## Project Structure
