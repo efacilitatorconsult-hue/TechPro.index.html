@@ -1,13 +1,17 @@
 import Stripe from 'stripe';
 import { createClient } from '@supabase/supabase-js';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
+import getRawBody from 'raw-body';
 
-const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '');
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY || '', {
+  apiVersion: '2024-06-20',
+});
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET || '';
 
 const supabaseUrl = process.env.VITE_SUPABASE_URL || '';
-const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY || '';
-const supabase = createClient(supabaseUrl, supabaseAnonKey);
+const supabaseServiceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY || '';
+
+const supabase = createClient(supabaseUrl, supabaseServiceRoleKey);
 
 export default async function handler(
   req: VercelRequest,
@@ -18,15 +22,14 @@ export default async function handler(
     return;
   }
 
-  const sig = req.headers['stripe-signature'] as string;
-  let event: Stripe.Event;
+  // ✅ raw body required by Stripe
+  const rawBody = await getRawBody(req);
 
+  const sig = req.headers['stripe-signature'] as string;
+
+  let event: Stripe.Event;
   try {
-    event = stripe.webhooks.constructEvent(
-      req.body,
-      sig,
-      webhookSecret
-    );
+    event = stripe.webhooks.constructEvent(rawBody, sig, webhookSecret);
   } catch (error) {
     console.error('Webhook verification error:', error);
     res.status(400).json({ error: 'Webhook verification failed' });
@@ -37,9 +40,9 @@ export default async function handler(
     switch (event.type) {
       case 'checkout.session.completed': {
         const session = event.data.object as Stripe.Checkout.Session;
+
         console.log('Checkout session completed:', session.id);
 
-        // Update user_access table in Supabase
         if (session.client_reference_id) {
           const { error: updateError } = await supabase
             .from('user_access')
@@ -53,6 +56,8 @@ export default async function handler(
 
           if (updateError) {
             console.error('Error updating user access:', updateError);
+          } else {
+            console.log('user_access updated for user_id:', session.client_reference_id);
           }
         }
         break;
@@ -62,7 +67,6 @@ export default async function handler(
         const subscription = event.data.object as Stripe.Subscription;
         console.log('Subscription cancelled:', subscription.id);
 
-        // Update user_access table to revoke premium
         const { error: updateError } = await supabase
           .from('user_access')
           .update({
@@ -80,7 +84,6 @@ export default async function handler(
       case 'invoice.payment_failed': {
         const invoice = event.data.object as Stripe.Invoice;
         console.log('Payment failed:', invoice.id);
-        // Handle failed payment - send email notification, etc.
         break;
       }
 
