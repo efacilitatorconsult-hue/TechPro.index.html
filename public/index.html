@@ -712,20 +712,42 @@
                 return;
             }
 
-            alert(`Registration successful!\nPlan: ${selectedPlan === 'guide' ? 'Gaming Hardware Guide (£9.99)' : 'TechPro Premium (£29.99/mo)'}`);
-            showPage('home');
+            const planName = selectedPlan === 'guide' ? 'Gaming Hardware Guide (£9.99)' : 'TechPro Premium (£29.99/mo)';
+            alert('Registration successful!\n\nPlan: ' + planName + '\n\nProcessing payment...');
+            
+            // Clear form
+            document.getElementById('reg-email').value = '';
+            document.getElementById('reg-password').value = '';
+            document.getElementById('reg-confirm').value = '';
+            
+            // Go back home after 2 seconds
+            setTimeout(() => {
+                showPage('home');
+                alert('Welcome to TechPro! Your purchase is complete.');
+            }, 2000);
         });
 
         // Login
         document.getElementById('btn-login').addEventListener('click', function() {
             const email = document.getElementById('login-email').value;
-            if (!email) {
-                alert('Please enter email');
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('Please enter email and password');
                 return;
             }
-            alert(`Welcome back, ${email}!`);
-            showPage('home');
+            
+            alert('Welcome back, ' + email + '!');
+            
+            // Clear form
+            document.getElementById('login-email').value = '';
+            document.getElementById('login-password').value = '';
+            
+            // Go back home
+            setTimeout(() => {
+                showPage('home');
+            }, 1000);
         });
     </script>
 </body>
-  </html>
+</html>
