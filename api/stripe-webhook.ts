@@ -31,6 +31,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
     return res.status(400).json({ error: 'Webhook verification failed' });
   }
 
+  // ✅ Log 1: confirm event type + id
+  console.log('stripe event received:', { type: event.type, id: event.id });
+
   try {
     if (event.type === 'checkout.session.completed') {
       const session = event.data.object as Stripe.Checkout.Session;
@@ -38,13 +41,20 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       const userId = session.client_reference_id;
       const customerId = session.customer as string;
 
+      // ✅ Log 2: confirm critical payload fields used by your code
+      console.log('session.completed payload used:', {
+        sessionId: session.id,
+        client_reference_id: session.client_reference_id,
+        customer: session.customer,
+      });
+
       if (!userId || !customerId) {
         console.warn('Missing client_reference_id or customer on session:', session.id);
         return res.status(200).json({ received: true });
       }
 
       // ✅ upsert instead of update
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('user_access')
         .upsert(
           {
@@ -56,6 +66,9 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
           },
           { onConflict: 'user_id' }
         );
+
+      // ✅ Log 3: confirm whether the write succeeded
+      console.log('upsert result:', { userId, customerId, error, data });
 
       if (error) console.error('Error upserting user_access:', error);
     }
